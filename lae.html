@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Merry Christmas</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Background Audio (Auto-play on page load) -->
+    <audio id="christmasMusic" loop>
+      <source src="christmas-music.mp3/BSO.mp3" type="audio/mpeg" />
+    </audio>
+    <div class="overlay">
+ <div class="main-card">
+        <img src="p/YR.jpg" class="main-photo" alt="Christmas Photo" />
+        <h1>Merry Christmas 🎄</h1>
+        <p>MA LAE LAE TUN</p>
+        <a href="about.html">
+          <button onclick="openGift()">🎁 Christmas Gift</button>
+        </a>
+      </div>
+    </div>
+
+   
+    <script src="script.js"></script>
+
+    <script>
+      // Mobile optimized music player
+      window.addEventListener("DOMContentLoaded", (event) => {
+        const music = document.getElementById("christmasMusic");
+        const body = document.body;
+
+        // Create music control button
+        const musicButton = document.createElement("button");
+        musicButton.className = "music-control";
+        musicButton.innerHTML = "🎵 Play Music";
+        musicButton.id = "musicToggle";
+
+        body.appendChild(musicButton);
+
+        // Mobile touch start event to enable audio
+        document.addEventListener(
+          "touchstart",
+          function initAudio() {
+            // Try to play on first touch
+            if (music.paused) {
+              music
+                .play()
+                .then(() => {
+                  musicButton.innerHTML = "🎵 Music Playing";
+                  musicButton.style.background = "#2e7d32";
+                })
+                .catch((e) => {
+                  console.log("Audio play failed:", e);
+                  musicButton.innerHTML = "▶ Tap to Play Music";
+                });
+            }
+
+            // Remove this listener after first touch
+            document.removeEventListener("touchstart", initAudio);
+          },
+          { once: true }
+        );
+
+        // Music button click handler
+        musicButton.addEventListener("click", function () {
+          if (music.paused) {
+            music.play();
+            musicButton.innerHTML = "🎵 Music Playing";
+            musicButton.style.background = "#2e7d32";
+          } else {
+            music.pause();
+            musicButton.innerHTML = "▶ Play Music";
+            musicButton.style.background = "#c1121f";
+          }
+        });
+
+        // Auto-play attempt (may not work on all mobile browsers)
+        setTimeout(() => {
+          if (music.paused) {
+            music
+              .play()
+              .then(() => {
+                musicButton.innerHTML = "🎵 Music Playing";
+                musicButton.style.background = "#2e7d32";
+              })
+              .catch((e) => {
+                // Auto-play failed, show play button
+                console.log("Auto-play prevented");
+              });
+          }
+        }, 1000);
+
+        // Handle page visibility change
+        document.addEventListener("visibilitychange", function () {
+          if (document.hidden) {
+            music.pause();
+          } else if (!music.paused) {
+            music.play().catch((e) => console.log("Resume play failed"));
+          }
+        });
+      });
+
+     
+
+      function closeGift() {
+        const modal = document.getElementById("giftModal");
+        const video = document.getElementById("giftVideo");
+
+        video.pause();
+        video.currentTime = 0;
+        modal.style.display = "none";
+      }
+    </script>
+  </body>
+</html>
